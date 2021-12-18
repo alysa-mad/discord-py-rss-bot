@@ -28,6 +28,7 @@ async def on_ready():
 async def on_message(message):
     global looking
     global old_mdan
+    global old_shakaw
     global msg_mdan
     global msg_shakaw
     link_mdan = d.entries[0].link
@@ -71,29 +72,26 @@ async def on_message(message):
                 for i in range(len(listrss[0])):
                     await message.channel.send(listrss[0][i])
                 old_mdan.clear()
-                old_mdan = listrss[0][1].copy()
-                print("[Debug]Valor de f'old[1]:", old[1])
+                old_mdan = listrss[0].copy()
+                print("[Debug]Valor de f'old_mdan[1]:", old_mdan[1])
                 listrss.clear()
-                msg_mdan = False
+                break
         while msg_shakaw:
             if await looking_shakaw(old_shakaw[1]) == False:
                 print("[Debug] Sem atualizações ainda na Shakaw!")
                 break
             else:
                 await message.channel.send("Atualização Encontrada na Shakaw!")
-                desc_s = s.entries[0].description
                 listrss_shakaw.append(s.entries[0].title)
                 listrss_shakaw.append(s.entries[0].link)
-                listrss_shakaw.append(desc_s.replace("<br />", "-").replace("[img]", "").replace("[/b]", "").replace("[b]", "").replace("[/img]", ""))
                 listrss.append(listrss_shakaw)
-                for e in range(len(listrss[1])):
-                    await message.channel.send(listrss[1][e])
-                old.clear()
-                old = listrss[0][1].copy()
-                print("[Debug] Valor de f'old_shakaw[1]:", old[1])
+                for e in range(len(listrss[0])):
+                    await message.channel.send(listrss[0][e])
+                old_shakaw.clear()
+                old_shakaw = listrss[0].copy()
+                print("[Debug] Valor de f'old_shakaw[1]:", old_shakaw[1])
                 listrss.clear()
-                msg_shakaw = False
-            looking = False
+                break
 async def looking_mdan(input_link):    ## Define qual RSS será atualizado
     link_mdan = d.entries[0].link
     if input_link == link_mdan:
