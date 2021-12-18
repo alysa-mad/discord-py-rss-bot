@@ -6,7 +6,7 @@ import asyncio
 looking = True
 listrss = []
 old = []
-old.append("nothing")
+old.append("0")
 old.append("1")
 msg = False
 d = feedparser.parse('RSS_MDAN')
@@ -19,6 +19,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    global looking
     global old
     global msg
     link = d.entries[0].link
@@ -28,18 +29,25 @@ async def on_message(message):
         msg = True
         looking = True
         print("[Debug]Valor de old[1]:", old[1])
-    if message.content == "$mdan stop":
+    if message.content == "$stop":
         msg = False
         looking = False
         print("[Debug] Você parou!")
         await message.channel.send("Você parou!")
-    while True:
+    if message.content == "$restart":
+        print("[Debug] Você recomeçou a procura!")
+        await message.channel.send("Você recomeçou a procura!")
+        msg = True
+        looking = True
+        print("[Debug]Valor de old[1]:", old[1])
+
+    while looking:
         while looking:
+            print("[Debug] Valor variável looking: ", looking)
             if old[1] == link:
                 msg = False
                 await asyncio.sleep(4)
                 print("[Debug] Sem atualizações ainda!")
-                looking = True
             else:
                 msg = True
                 print("[Debug] Atualização Encontrada!")
@@ -49,7 +57,6 @@ async def on_message(message):
             if old[1] == link:
                 msg = False
                 print("[Debug] Sem atualizações ainda!")
-                looking = True
             else:
                 desc = d.entries[0].description
                 listrss.append(d.entries[0].title)
@@ -63,5 +70,5 @@ async def on_message(message):
                 listrss.clear()
                 looking = True
                 msg = False
-
+    print(message.content)
 client.run('Discord_BOT_TOKEN')
