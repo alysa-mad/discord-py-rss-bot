@@ -9,7 +9,7 @@ old = []
 old.append("nothing")
 old.append("1")
 msg = False
-d = feedparser.parse('https://bt.mdan.org/rss.php?cats=1,2,3,4,5,6,7,13,18,20,22,24&passkey=d2ad6f0ed6ce5a64c8f96518286718df')
+d = feedparser.parse('RSS_MDAN')
 client = discord.Client()
 
 @client.event
@@ -24,30 +24,31 @@ async def on_message(message):
     link = d.entries[0].link
     if message.author == client.user:
         return
-    if message.content.startswith("$mdan"):
+    if message.content == "$mdan":
         msg = True
         looking = True
-        print(old[1])
-    if message.content.startswith("$mdan stop"):
+        print("[Debug]Valor de old[1]:", old[1])
+    if message.content == "$mdan stop":
         msg = False
         looking = False
-        print("Você parou!")
+        print("[Debug] Você parou!")
+        await message.channel.send("Você parou!")
     while True:
         while looking:
             if old[1] == link:
                 msg = False
                 await asyncio.sleep(4)
-                print("Sem atualizações ainda!")
+                print("[Debug] Sem atualizações ainda!")
                 looking = True
             else:
                 msg = True
-                print("Atualização Encontrada!")
+                print("[Debug] Atualização Encontrada!")
                 await message.channel.send("Atualização Encontrada!")
                 looking = False
         while msg:
             if old[1] == link:
                 msg = False
-                print("Sem atualizações ainda!")
+                print("[Debug] Sem atualizações ainda!")
                 looking = True
             else:
                 desc = d.entries[0].description
@@ -58,7 +59,7 @@ async def on_message(message):
                     await message.channel.send(listrss[i])
                 old.clear()
                 old = listrss.copy()
-                print(old[1])
+                print("[Debug]Valor de f'old[1]:", old[1])
                 listrss.clear()
                 looking = True
                 msg = False
