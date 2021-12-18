@@ -71,8 +71,7 @@ async def on_message(message):
                 old_mdan = listrss[0][1].copy()
                 print("[Debug]Valor de f'old[1]:", old[1])
                 listrss.clear()
-                looking = True
-                msg = False
+                msg_mdan = False
         while msg_shakaw:
             if await looking_shakaw(old_shakaw[1]) == False:
                 print("[Debug] Sem atualizações ainda na Shakaw!")
@@ -89,9 +88,8 @@ async def on_message(message):
                 old = listrss[0][1].copy()
                 print("[Debug] Valor de f'old_shakaw[1]:", old[1])
                 listrss.clear()
-                looking = True
-                msg = False
-
+                msg_shakaw = False
+            looking = False
 async def looking_mdan(input_link):    ## Define qual RSS será atualizado
     link_mdan = d.entries[0].link
     if input_link == link_mdan:
