@@ -53,7 +53,9 @@ async def on_message(message):
         print("[Debug]Valor de old_mdan[1]:", old_mdan[1])
         print("[Debug]Valor de old_shakaw[1]:", old_shakaw[1])
     while looking:
+        print("[Debug] Test while 1")
         while msg_mdan:
+            print("[Debug] Test while 2")
             if await looking_mdan(old_mdan[1]) == False:
                 print("[Debug] Sem atualizações ainda na Shakaw!")
                 break
