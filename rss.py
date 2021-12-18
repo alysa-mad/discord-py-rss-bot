@@ -5,11 +5,18 @@ import asyncio
 
 looking = True
 listrss = []
-old = []
-old.append("0")
-old.append("1")
-msg = False
+listrss_mdan = []
+listrss_shakaw = []
+old_mdan = []
+old_mdan.append("0")
+old_mdan.append("1")
+msg_shakaw = False
+old_shakaw = []
+old_shakaw.append("0")
+old_shakaw.append("1")
+msg_shakaw = False
 d = feedparser.parse('RSS_MDAN')
+s = feedparser.parse('RSS_SHAKAW')
 client = discord.Client()
 
 @client.event
@@ -20,15 +27,16 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global looking
-    global old
+    global old_mdan
     global msg
-    link = d.entries[0].link
+    link_mdan = d.entries[0].link
+    link_shakaw = s.entries[0].link
     if message.author == client.user:
         return
     if message.content == "$mdan":
         msg = True
         looking = True
-        print("[Debug]Valor de old[1]:", old[1])
+        print("[Debug]Valor de old_mdan[1]:", old_mdan[1])
     if message.content == "$stop":
         msg = False
         looking = False
@@ -40,35 +48,62 @@ async def on_message(message):
         msg = True
         looking = True
         print("[Debug]Valor de old[1]:", old[1])
+async def looking_mdan(input_link):    ## Define qual RSS será atualizado
+    global link_mdan
+    if input_link == link_mdan:
+        await asyncio.sleep(4)
+        print("[Debug] Sem atualizações ainda na Mdan!")
+        return False
+    else:
+        print("[Debug] Atualização Encontrada na Mdan!")
+        await message.channel.send("Atualização Encontrada na Mdan!")
+        return True
+
+async def looking_shakaw(input_link):    ## Define qual RSS será atualizado
+    global link_shakaw
+    if input_link == link_shakaw:
+        await asyncio.sleep(4)
+        print("[Debug] Sem atualizações ainda na Shakaw!")
+        return False
+    else:
+        print("[Debug] Atualização Encontrada na Shakaw!")
+        await message.channel.send("Atualização Encontrada na Shakaw!")
+        return True
 
     while looking:
-        while looking:
-            print("[Debug] Valor variável looking: ", looking)
-            if old[1] == link:
-                msg = False
-                await asyncio.sleep(4)
-                print("[Debug] Sem atualizações ainda!")
-            else:
-                msg = True
-                print("[Debug] Atualização Encontrada!")
-                await message.channel.send("Atualização Encontrada!")
-                looking = False
-        while msg:
-            if old[1] == link:
-                msg = False
-                print("[Debug] Sem atualizações ainda!")
+        while msg_mdan:
+            if await looking_mdan(old_mdan[1]) == False:
+                break
             else:
                 desc = d.entries[0].description
-                listrss.append(d.entries[0].title)
-                listrss.append(d.entries[0].link)
-                listrss.append(desc.replace("<br />", "-").replace("[img]", "").replace("[/b]", "").replace("[b]", "").replace("[/img]", ""))
-                for i in range(len(listrss)):
-                    await message.channel.send(listrss[i])
-                old.clear()
-                old = listrss.copy()
+                listrss_mdan.append(d.entries[0].title)
+                listrss_mdan.append(d.entries[0].link)
+                listrss_mdan.append(desc.replace("<br />", "-").replace("[img]", "").replace("[/b]", "").replace("[b]", "").replace("[/img]", ""))
+                listrss.append(listrss_mdan)
+                for i in range(len(listrss[0])):
+                    await message.channel.send(listrss[0][i])
+                old_mdan.clear()
+                old_mdan = listrss[0][1].copy()
                 print("[Debug]Valor de f'old[1]:", old[1])
                 listrss.clear()
                 looking = True
                 msg = False
-    print(message.content)
+        while msg_shakaw:
+            if await looking_shakaw(old_shakaw[1]) == False:
+                break
+            else:
+                desc = d.entries[0].description
+                listrss_shakaw.append(d.entries[0].title)
+                listrss_shakaw.append(d.entries[0].link)
+                listrss_shakaw.append(desc.replace("<br />", "-").replace("[img]", "").replace("[/b]", "").replace("[b]", "").replace("[/img]", ""))
+                listrss.append(listrss_shakaw)
+                for e in range(len(listrss[1])):
+                    await message.channel.send(listrss[1][e])
+                old.clear()
+                old = listrss[0][1].copy()
+                print("[Debug] Valor de f'old_shakaw[1]:", old[1])
+                listrss.clear()
+                looking = True
+                msg = False
+    print("[Debug] message.content final de loop 1", message.content)
 client.run('Discord_BOT_TOKEN')
