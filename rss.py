@@ -60,10 +60,10 @@ async def on_message(message):
         while msg_mdan:
             print("[Debug] Test while 2")
             if await looking_mdan(old_mdan[1]) == False:
-                print("[Debug] Sem atualizações ainda na Mdan!")
+                print("[Debug] Sem atualizações ainda na Mdan [1]while msg_m!")
                 break
             else:
-                await message.channel.send("Atualização Encontrada na Mdan!")
+                await message.channel.send("Atualização Encontrada na Mdan [1]while msg_m!")
                 desc_m = d.entries[0].description
                 listrss_mdan.append(d.entries[0].title)
                 listrss_mdan.append(d.entries[0].link)
@@ -78,10 +78,10 @@ async def on_message(message):
                 break
         while msg_shakaw:
             if await looking_shakaw(old_shakaw[1]) == False:
-                print("[Debug] Sem atualizações ainda na Shakaw!")
+                print("[Debug] Sem atualizações ainda na Shakaw [1]while msg_s!")
                 break
             else:
-                await message.channel.send("Atualização Encontrada na Shakaw!")
+                await message.channel.send("Atualização Encontrada na Shakaw [1]while msg_s!")
                 listrss_shakaw.append(s.entries[0].title)
                 listrss_shakaw.append(s.entries[0].link)
                 listrss.append(listrss_shakaw)
@@ -96,20 +96,20 @@ async def looking_mdan(input_link):    ## Define qual RSS será atualizado
     link_mdan = d.entries[0].link
     if input_link == link_mdan:
         await asyncio.sleep(4)
-        print("[Debug] Sem atualizações ainda na Mdan!")
+        print("[Debug] Sem atualizações ainda na Mdan [2]func_m!")
         return False
     else:
-        print("[Debug] Atualização Encontrada na Mdan!")
+        print("[Debug] Atualização Encontrada na Mdan [2]func_m!")
         return True
 
 async def looking_shakaw(input_link):    ## Define qual RSS será atualizado
     link_shakaw = s.entries[0].link
     if input_link == link_shakaw:
         await asyncio.sleep(4)
-        print("[Debug] Sem atualizações ainda na Shakaw!")
+        print("[Debug] Sem atualizações ainda na Shakaw [2]func_s!")
         return False
     else:
-        print("[Debug] Atualização Encontrada na Shakaw!")
+        print("[Debug] Atualização Encontrada na Shakaw [2]func_s!")
         return True
     print("[Debug] message.content final de loop 1", message.content)
 client.run('Discord_BOT_TOKEN')
