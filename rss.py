@@ -28,7 +28,8 @@ async def on_ready():
 async def on_message(message):
     global looking
     global old_mdan
-    global msg
+    global msg_mdan
+    global msg_shakaw
     link_mdan = d.entries[0].link
     link_shakaw = s.entries[0].link
     if message.author == client.user:
