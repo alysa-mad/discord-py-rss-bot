@@ -1,7 +1,6 @@
 import discord
 import feedparser
 import os
-import time
 import asyncio
 
 looking = True
