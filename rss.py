@@ -34,8 +34,6 @@ async def on_message(message):
     if message.author == client.user:
         return
     if message.content == "$look":
-        msg_mdan = True
-        msg_shakaw = True
         looking = True
         print("[Debug]Valor de old_mdan[1]:", old_mdan[1])
         print("[Debug]Valor de old_shakaw[1]:", old_shakaw[1])
@@ -92,7 +90,7 @@ async def on_message(message):
                 msg = False
 
 async def looking_mdan(input_link):    ## Define qual RSS será atualizado
-    global link_mdan
+    link_mdan = d.entries[0].link
     if input_link == link_mdan:
         await asyncio.sleep(4)
         print("[Debug] Sem atualizações ainda na Mdan!")
@@ -103,7 +101,7 @@ async def looking_mdan(input_link):    ## Define qual RSS será atualizado
         return True
 
 async def looking_shakaw(input_link):    ## Define qual RSS será atualizado
-    global link_shakaw
+    link_shakaw = s.entries[0].link
     if input_link == link_shakaw:
         await asyncio.sleep(4)
         print("[Debug] Sem atualizações ainda na Shakaw!")
