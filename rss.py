@@ -10,7 +10,7 @@ listrss_shakaw = []
 old_mdan = []
 old_mdan.append("0")
 old_mdan.append("1")
-msg_shakaw = False
+msg_mdan = False
 old_shakaw = []
 old_shakaw.append("0")
 old_shakaw.append("1")
@@ -33,19 +33,22 @@ async def on_message(message):
     link_shakaw = s.entries[0].link
     if message.author == client.user:
         return
-    if message.content == "$mdan":
-        msg = True
+    if message.content == "$look":
+        msg_mdan = True
+        msg_false = True
         looking = True
         print("[Debug]Valor de old_mdan[1]:", old_mdan[1])
     if message.content == "$stop":
-        msg = False
+        msg_mdan = False
+        msg_shakaw = False
         looking = False
         print("[Debug] Você parou!")
         await message.channel.send("Você parou!")
     if message.content == "$restart":
         print("[Debug] Você recomeçou a procura!")
         await message.channel.send("Você recomeçou a procura!")
-        msg = True
+        msg_mdan = True
+        msg_shakaw = False
         looking = True
         print("[Debug]Valor de old[1]:", old[1])
 async def looking_mdan(input_link):    ## Define qual RSS será atualizado
