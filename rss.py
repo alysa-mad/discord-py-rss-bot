@@ -3,7 +3,7 @@ import feedparser
 import os
 import asyncio
 
-looking = True
+looking = False
 listrss = []
 listrss_mdan = []
 listrss_shakaw = []
@@ -47,7 +47,7 @@ async def on_message(message):
         print("[Debug] Você recomeçou a procura!")
         await message.channel.send("Você recomeçou a procura!")
         msg_mdan = True
-        msg_shakaw = False
+        msg_shakaw = True
         looking = True
         print("[Debug]Valor de old_mdan[1]:", old_mdan[1])
         print("[Debug]Valor de old_shakaw[1]:", old_shakaw[1])
