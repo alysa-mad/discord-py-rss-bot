@@ -64,4 +64,4 @@ async def on_message(message):
                 looking = True
                 msg = False
 
-client.run('OTIxNTQ5OTg1OTY5OTk1Nzk2.Yb0iTg.WiE-5jbqzka5IszLoO5myJiw03k')
+client.run('Discord_BOT_TOKEN')
