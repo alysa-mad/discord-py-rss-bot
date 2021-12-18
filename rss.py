@@ -35,6 +35,8 @@ async def on_message(message):
     if message.author == client.user:
         return
     if message.content == "$look":
+        msg_mdan = True
+        msg_shakaw = True
         looking = True
         print("[Debug]Valor de old_mdan[1]:", old_mdan[1])
         print("[Debug]Valor de old_shakaw[1]:", old_shakaw[1])
@@ -57,13 +59,14 @@ async def on_message(message):
         while msg_mdan:
             print("[Debug] Test while 2")
             if await looking_mdan(old_mdan[1]) == False:
-                print("[Debug] Sem atualizações ainda na Shakaw!")
+                print("[Debug] Sem atualizações ainda na Mdan!")
                 break
             else:
-                desc = d.entries[0].description
+                await message.channel.send("Atualização Encontrada na Mdan!")
+                desc_m = d.entries[0].description
                 listrss_mdan.append(d.entries[0].title)
                 listrss_mdan.append(d.entries[0].link)
-                listrss_mdan.append(desc.replace("<br />", "-").replace("[img]", "").replace("[/b]", "").replace("[b]", "").replace("[/img]", ""))
+                listrss_mdan.append(desc_m.replace("<br />", "-").replace("[img]", "").replace("[/b]", "").replace("[b]", "").replace("[/img]", ""))
                 listrss.append(listrss_mdan)
                 for i in range(len(listrss[0])):
                     await message.channel.send(listrss[0][i])
@@ -77,10 +80,11 @@ async def on_message(message):
                 print("[Debug] Sem atualizações ainda na Shakaw!")
                 break
             else:
-                desc = d.entries[0].description
-                listrss_shakaw.append(d.entries[0].title)
-                listrss_shakaw.append(d.entries[0].link)
-                listrss_shakaw.append(desc.replace("<br />", "-").replace("[img]", "").replace("[/b]", "").replace("[b]", "").replace("[/img]", ""))
+                await message.channel.send("Atualização Encontrada na Shakaw!")
+                desc_s = s.entries[0].description
+                listrss_shakaw.append(s.entries[0].title)
+                listrss_shakaw.append(s.entries[0].link)
+                listrss_shakaw.append(desc_s.replace("<br />", "-").replace("[img]", "").replace("[/b]", "").replace("[b]", "").replace("[/img]", ""))
                 listrss.append(listrss_shakaw)
                 for e in range(len(listrss[1])):
                     await message.channel.send(listrss[1][e])
@@ -98,7 +102,6 @@ async def looking_mdan(input_link):    ## Define qual RSS será atualizado
         return False
     else:
         print("[Debug] Atualização Encontrada na Mdan!")
-        await message.channel.send("Atualização Encontrada na Mdan!")
         return True
 
 async def looking_shakaw(input_link):    ## Define qual RSS será atualizado
@@ -109,7 +112,6 @@ async def looking_shakaw(input_link):    ## Define qual RSS será atualizado
         return False
     else:
         print("[Debug] Atualização Encontrada na Shakaw!")
-        await message.channel.send("Atualização Encontrada na Shakaw!")
         return True
     print("[Debug] message.content final de loop 1", message.content)
 client.run('Discord_BOT_TOKEN')
