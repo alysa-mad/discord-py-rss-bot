@@ -3,6 +3,7 @@ import feedparser
 import os
 import asyncio
 
+call_link = False
 looking = False
 listrss = []
 listrss_mdan = []
@@ -15,6 +16,7 @@ old_shakaw = []
 old_shakaw.append("0")
 old_shakaw.append("1")
 msg_shakaw = False
+passk = None
 d = feedparser.parse('RSS_MDAN')
 s = feedparser.parse('RSS_SHAKAW')
 client = discord.Client()
@@ -27,12 +29,14 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global looking
+    global call_link
+    global passk
     global old_mdan
     global old_shakaw
     global msg_mdan
     global msg_shakaw
     link_mdan = d.entries[0].link
-    link_shakaw = s.entries[0].link
+    title_shakaw = s.entries[0].title
     if message.author == client.user:
         return
     if message.content == "$look":
@@ -55,6 +59,17 @@ async def on_message(message):
         looking = True
         print("[Debug]Valor de old_mdan[1]:", old_mdan[1])
         print("[Debug]Valor de old_shakaw[1]:", old_shakaw[1])
+    if message.content == "$pass":
+        await message.channel.send("Escreva sua chave Shakaw:")
+        def check(m):
+                    return m.author == message.author
+        msg = await client.wait_for('message', check=check)
+        passk = msg.content
+        storage_pass = {message.author: msg.content}
+        print(storage_pass.get(message.author))
+        await message.channel.send("Sua chave foi armazenada!")
+    if message.content == "$link":
+        call_link = True
     while looking:
         print("[Debug] Test while 1")
         while msg_mdan:
@@ -77,13 +92,29 @@ async def on_message(message):
                 listrss.clear()
                 break
         while msg_shakaw:
-            if await looking_shakaw(old_shakaw[1]) == False:
+            if call_link:
+                linkcallsk = s.entries[0].link
+                linkcallsk = linkcallsk.split("passkey=", 2)
+                if passk != None:
+                    linkcallsk = linkcallsk[0] + "passkey=" + passk
+                    await message.channel.send(linkcallsk)
+                else:
+                    linkcallsk = "---- Passkey não recebida, use $pass ----"
+                    await message.channel.send(linkcallsk)
+                call_link = False
+            if await looking_shakaw(old_shakaw[0]) == False:
                 print("[Debug] Sem atualizações ainda na Shakaw [1]while msg_s!")
                 break
             else:
-                await message.channel.send("Atualização Encontrada na Shakaw [1]while msg_s!")
+                await message.channel.send("Atualização Encontrada na Shakaw ou Link Chamado!")
                 listrss_shakaw.append(s.entries[0].title)
-                listrss_shakaw.append(s.entries[0].link)
+                linksk = s.entries[0].link
+                linksk = linksk.split("passkey=", 2)
+                if passk != None:
+                    linksk = linksk[0] + "passkey=" + passk
+                else:
+                    linksk = "---- Passkey não recebida, use $pass ----"
+                listrss_shakaw.append(linksk)
                 listrss.append(listrss_shakaw)
                 for e in range(len(listrss[0])):
                     await message.channel.send(listrss[0][e])
@@ -103,8 +134,8 @@ async def looking_mdan(input_link):    ## Define qual RSS será atualizado
         return True
 
 async def looking_shakaw(input_link):    ## Define qual RSS será atualizado
-    link_shakaw = s.entries[0].link
-    if input_link == link_shakaw:
+    title_shakaw = s.entries[0].title
+    if input_link == title_shakaw:
         await asyncio.sleep(4)
         print("[Debug] Sem atualizações ainda na Shakaw [2]func_s!")
         return False
