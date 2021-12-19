@@ -60,7 +60,7 @@ async def on_message(message):
         print("[Debug]Valor de old_mdan[1]:", old_mdan[1])
         print("[Debug]Valor de old_shakaw[1]:", old_shakaw[1])
     if message.content == "$pass":
-        await message.channel.send("Escreva sua chave Shakaw:")
+        await message.author.send("Escreva sua chave Shakaw: (Por sua segurança edite a mensagem após o envio!)")
         def check(m):
                     return m.author == message.author
         msg = await client.wait_for('message', check=check)
@@ -97,7 +97,7 @@ async def on_message(message):
                 linkcallsk = linkcallsk.split("passkey=", 2)
                 if passk != None:
                     linkcallsk = linkcallsk[0] + "passkey=" + passk
-                    await message.channel.send(linkcallsk)
+                    await message.author.send(linkcallsk)
                 else:
                     linkcallsk = "---- Passkey não recebida, use $pass ----"
                     await message.channel.send(linkcallsk)
@@ -106,7 +106,7 @@ async def on_message(message):
                 print("[Debug] Sem atualizações ainda na Shakaw [1]while msg_s!")
                 break
             else:
-                await message.channel.send("Atualização Encontrada na Shakaw ou Link Chamado!")
+                await message.channel.send("Atualização Encontrada na Shakaw")
                 listrss_shakaw.append(s.entries[0].title)
                 linksk = s.entries[0].link
                 linksk = linksk.split("passkey=", 2)
