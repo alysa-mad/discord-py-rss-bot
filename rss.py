@@ -67,30 +67,34 @@ async def on_message(message):
         passk = msg.content
         storage_pass = {message.author: msg.content}
         print(storage_pass.get(message.author))
-        await message.channel.send("Sua chave foi armazenada!")
+        await message.author.send("Sua chave foi armazenada!")
     if message.content == "$link":
         call_link = True
     while looking:
         print("[Debug] Test while 1")
         while msg_mdan:
             print("[Debug] Test while 2")
-            if await looking_mdan(old_mdan[1]) == False:
-                print("[Debug] Sem atualizações ainda na Mdan [1]while msg_m!")
-                break
-            else:
-                await message.channel.send("Atualização Encontrada na Mdan [1]while msg_m!")
-                desc_m = d.entries[0].description
-                listrss_mdan.append(d.entries[0].title)
-                listrss_mdan.append(d.entries[0].link)
-                listrss_mdan.append(desc_m.replace("<br />", "-").replace("[img]", "").replace("[/b]", "").replace("[b]", "").replace("[/img]", ""))
-                listrss.append(listrss_mdan)
-                for i in range(len(listrss[0])):
-                    await message.channel.send(listrss[0][i])
-                old_mdan.clear()
-                old_mdan = listrss[0].copy()
-                print("[Debug]Valor de f'old_mdan[1]:", old_mdan[1])
-                listrss.clear()
-                break
+            try:
+                if await looking_mdan(old_mdan[1]) == False:
+                    print("[Debug] Sem atualizações ainda na Mdan [1]while msg_m!")
+                    break
+                else:
+                    await message.channel.send("Atualização Encontrada na Mdan [1]while msg_m!")
+                    desc_m = d.entries[0].description
+                    listrss_mdan.append(d.entries[0].title)
+                    listrss_mdan.append(d.entries[0].link)
+                    listrss_mdan.append(desc_m.replace("<br />", "-").replace("[img]", "").replace("[/b]", "").replace("[b]", "").replace("[/img]", ""))
+                    listrss.append(listrss_mdan)
+                    for i in range(len(listrss[0])):
+                        await message.channel.send(listrss[0][i])
+                    old_mdan.clear()
+                    old_mdan = listrss[0].copy()
+                    print("[Debug]Valor de f'old_mdan[1]:", old_mdan[1])
+                    listrss.clear()
+                    break
+            except IndexError:
+                print("[DEBUG] RSS MDAN Indisponível - Erro de Conexão")
+                continue
         while msg_shakaw:
             if call_link:
                 linkcallsk = s.entries[0].link
@@ -102,27 +106,31 @@ async def on_message(message):
                     linkcallsk = "---- Passkey não recebida, use $pass ----"
                     await message.channel.send(linkcallsk)
                 call_link = False
-            if await looking_shakaw(old_shakaw[0]) == False:
-                print("[Debug] Sem atualizações ainda na Shakaw [1]while msg_s!")
-                break
-            else:
-                await message.channel.send("Atualização Encontrada na Shakaw")
-                listrss_shakaw.append(s.entries[0].title)
-                linksk = s.entries[0].link
-                linksk = linksk.split("passkey=", 2)
-                if passk != None:
-                    linksk = linksk[0] + "passkey=" + passk
+            try:
+                if await looking_shakaw(old_shakaw[0]) == False:
+                    print("[Debug] Sem atualizações ainda na Shakaw [1]while msg_s!")
+                    break
                 else:
-                    linksk = "---- Passkey não recebida, use $pass ----"
-                listrss_shakaw.append(linksk)
-                listrss.append(listrss_shakaw)
-                for e in range(len(listrss[0])):
-                    await message.channel.send(listrss[0][e])
-                old_shakaw.clear()
-                old_shakaw = listrss[0].copy()
-                print("[Debug] Valor de f'old_shakaw[1]:", old_shakaw[1])
-                listrss.clear()
-                break
+                    await message.channel.send("Atualização Encontrada na Shakaw")
+                    listrss_shakaw.append(s.entries[0].title)
+                    linksk = s.entries[0].link
+                    linksk = linksk.split("passkey=", 2)
+                    if passk != None:
+                        linksk = linksk[0] + "passkey=" + passk
+                    else:
+                        linksk = "---- Passkey não recebida, use $pass ----"
+                    listrss_shakaw.append(linksk)
+                    listrss.append(listrss_shakaw)
+                    for e in range(len(listrss[0])):
+                        await message.channel.send(listrss[0][e])
+                    old_shakaw.clear()
+                    old_shakaw = listrss[0].copy()
+                    print("[Debug] Valor de f'old_shakaw[1]:", old_shakaw[1])
+                    listrss.clear()
+                    break
+            except IndexError:
+                print("[DEBUG] RSS Shakaw Indisponível - Erro de Conexão")
+                continue
 async def looking_mdan(input_link):    ## Define qual RSS será atualizado
     link_mdan = d.entries[0].link
     if input_link == link_mdan:
