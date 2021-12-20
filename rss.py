@@ -65,6 +65,10 @@ async def on_message(message):
                     return m.author == message.author
         msg = await client.wait_for('message', check=check)
         passk = msg.content
+        try:
+            storage_pass.pop(message.author)
+        except:
+            continue
         storage_pass = {message.author: msg.content}
         print(storage_pass.get(message.author))
         await message.author.send("Sua chave foi armazenada!")
