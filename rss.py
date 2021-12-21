@@ -24,7 +24,7 @@ client = discord.Client()
 @client.event
 
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    print('[Debug] O bot {0.user} se logou e está funcional!'.format(client))
 
 @client.event
 async def on_message(message):
@@ -39,6 +39,9 @@ async def on_message(message):
     title_shakaw = s.entries[0].title
     if message.author == client.user:
         return
+        
+    ########## Comandos de chat ##########
+    
     if message.content == "$look":
         msg_mdan = True
         msg_shakaw = True
@@ -57,8 +60,8 @@ async def on_message(message):
         msg_mdan = True
         msg_shakaw = True
         looking = True
-        print("[Debug]Valor de old_mdan[1]:", old_mdan[1])
-        print("[Debug]Valor de old_shakaw[1]:", old_shakaw[1])
+        print("[Debug] Valor de old_mdan[1]:", old_mdan[1])
+        print("[Debug] Valor de old_shakaw[1]:", old_shakaw[1])
     if message.content == "$pass":
         await message.author.send("Escreva sua chave Shakaw: (Por sua segurança edite a mensagem após o envio!)")
         def check(m):
@@ -74,6 +77,29 @@ async def on_message(message):
         await message.author.send("Sua chave foi armazenada!")
     if message.content == "$link":
         call_link = True
+    if message.content == "$debug":
+        try:
+            check_rss1 = d.entries[0].title
+            if check_rss1 == d.entries[0].title:
+                print("[DEBUG] RSS MDAN Online")
+                await message.channel.send("[DEBUG] RSS MDAN Online")
+        except IndexError:
+            print("[DEBUG] RSS MDAN Offline")
+            await message.channel.send("[DEBUG] RSS MDAN Offline")
+            continue
+        try:
+            check_rss2 = s.entries[0].title
+            if check_rss1 == s.entries[0].title:
+                print("[DEBUG] RSS Shakaw Online")
+                await message.channel.send("[DEBUG] RSS Shakaw Online")
+        except IndexError:
+            print("[DEBUG] RSS Shakaw Offline")
+            await message.channel.send("[DEBUG] RSS Shakaw Offline")
+            continue
+            
+
+###''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''###
+
     while looking:
         print("[Debug] Test while 1")
         while msg_mdan:
@@ -83,7 +109,7 @@ async def on_message(message):
                     print("[Debug] Sem atualizações ainda na Mdan [1]while msg_m!")
                     break
                 else:
-                    await message.channel.send("Atualização Encontrada na Mdan [1]while msg_m!")
+                    await message.channel.send("Atualização Encontrada na Mdan!")
                     desc_m = d.entries[0].description
                     listrss_mdan.append(d.entries[0].title)
                     listrss_mdan.append(d.entries[0].link)
